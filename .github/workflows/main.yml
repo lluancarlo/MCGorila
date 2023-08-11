@@ -1,0 +1,22 @@
+name: Deploy to BisectHosting
+on:
+    push:
+        branches: [main]
+jobs:
+    deploy_job:
+      runs-on: ubuntu-latest
+      name: deploy
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: deploy file
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+            username: ${{ secrets.ftp_username }} 
+            password: ${{ secrets.ftp_password }} 
+            server: ${{ secrets.ftp_host }} 
+            port: 2022
+            local_path: './*'
+            remote_path: '/'
+            sftp_only: true
+            sftpArgs: '-o ConnectTimeout=5'
