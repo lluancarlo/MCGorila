@@ -10,7 +10,7 @@ jobs:
       - name: Checkout to branch
         uses: actions/checkout@v2
       - name: Set discord token
-        run: echo "TOKEN=${{ secrets.ftp_username }}" >> env
+        run: echo "TOKEN=${{ secrets.env_token }}" >> env
       - name: Deploying files
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
