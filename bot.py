@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv("env")
 COGS_FILE = ("help_cog", "music_cog")
 INTENTS = discord.Intents.default()
 INTENTS.message_content = True
