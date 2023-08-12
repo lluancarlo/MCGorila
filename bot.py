@@ -14,7 +14,7 @@ bot.remove_command('help')
 @bot.event
 async def setup_hook() -> None:
     for file in COGS_FILE:
-        await bot.load_extension("cogs/{file}")
+        await bot.load_extension(f"cogs.{file}")
         print(file + " loaded!")
 
 # Run the bot with your token
