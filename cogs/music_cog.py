@@ -11,11 +11,11 @@ class music_cog(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
         self.list_max = 5
-    
+
         #all the music related stuff
         self.is_playing = False
         self.is_paused = False
-
+        
         # 2d array containing [song, channel]
         self.music_queue = []
         self.YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True', 'cookiefile':'anyfile', 'verbose': 'False'}
@@ -42,8 +42,8 @@ class music_cog(commands.Cog):
         # Remove previous music
         if len(self.music_queue) > 0:
             self.music_queue.pop(0)
-        play_music(ctx)
-
+        self.play_music(ctx=ctx)
+    
 
     # infinite loop checking 
     async def play_music(self, ctx) -> None:
