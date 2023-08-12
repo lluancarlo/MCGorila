@@ -113,7 +113,6 @@ class music_cog(commands.Cog):
     async def skip(self, ctx) -> None:
         if self.vc != None and self.vc:
             self.vc.stop()
-            #try to play next in the queue if it exists
             self.play_next(ctx=ctx)
 
 
