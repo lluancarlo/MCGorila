@@ -1,3 +1,4 @@
+import json
 import discord
 from discord.ext import commands
 
@@ -10,18 +11,18 @@ class help_cog(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
         self.text_channel_list = []
-        self.help_message = """
-```
-General commands:
-/help - displays all the available commands
-/p <keywords> - finds the song on youtube and plays it in your current channel. Will resume playing the current song if it was paused
-/q - displays the current music queue
-/skip - skips the current song being played
-/clear - Stops the music and clears the queue
-/leave - Disconnected the bot from the voice channel
-/pause - pauses the current song being played or resumes if already paused
-/resume - resumes playing the current song
-```
+        self.help_message = f"""
+## Comandos:
+Use `{bot.command_prefix}` antes de todas os comandos. Exemplo: `!stop`
+* **help** - Mostra todos os comandos
+### Player de Musica
+* **play** - Procura video no Youtube e toca ou da play em musica em pausa
+* **stop** - Pausa ou continua musica atual
+* **resume** - Continua musica atual
+* **skip** - Pula musica atual
+* **list** - Lista musicas na playlist
+* **clear** - Para a musica e limpa playlist
+* **quit** - Forca bot a sair do chat
 """
 
     
