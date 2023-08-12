@@ -75,6 +75,7 @@ class music_cog(commands.Cog):
             self.last_music = self.music_queue[0]
             self.music_queue.pop(0)
 
+            await ctx.send(f"💬 Tocando **{self.last_music['title']}**.")
             self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
         else:
             self.is_playing = False
@@ -152,12 +153,13 @@ class music_cog(commands.Cog):
     @commands.command(name="list", help="Displays the current songs in queue")
     async def queue(self, ctx) -> None:
         msg = ""
-        for i in range(0, len(self.music_queue)):
-            if i == 0:
-                msg += "### Playlist:" + "\n"
-                msg += "   **Agora** - " + self.music_queue[0][0]['title'] + "\n"
 
-            elif (i < self.list_max):
+        if self.last_music != None:
+            msg += "### Playlist:" + "\n"
+            msg += "   **Tocando** - " + self.last_music['title'] + "\n"
+        
+        for i in range(0, len(self.music_queue)):
+            if (i < self.list_max):
                 msg += f"   **({i})** - " + self.music_queue[i][0]['title'] + "\n"
             
             else:
