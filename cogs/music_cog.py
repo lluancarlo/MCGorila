@@ -1,4 +1,3 @@
-from ast import alias
 import discord
 from discord.ext import commands
 from youtube_dl import YoutubeDL
@@ -11,6 +10,7 @@ class music_cog(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
         self.list_max = 5
+        self.last_music = None
 
         #all the music related stuff
         self.is_playing = False
@@ -38,22 +38,46 @@ class music_cog(commands.Cog):
         }
 
 
-    def play_next(self, ctx) -> None:
-        # Remove previous music
+    def play_next(self) -> None:
         if len(self.music_queue) > 0:
+            self.is_playing = True
+
+            #get the first url
+            m_url = self.music_queue[0][0]['source']
+
+            #remove the first element as you are currently playing it
             self.music_queue.pop(0)
-        self.play_music(ctx=ctx)
-    
+
+            self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+        else:
+            self.is_playing = False
+
 
     # infinite loop checking 
     async def play_music(self, ctx) -> None:
         if len(self.music_queue) > 0:
             self.is_playing = True
+
             m_url = self.music_queue[0][0]['source']
-            self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next(ctx=ctx))
+
+            #try to connect to voice channel if you are not already connected
+            if self.vc == None or not self.vc.is_connected():
+                self.vc = await self.music_queue[0][1].connect()
+
+                #in case we fail to connect
+                if self.vc == None:
+                    await ctx.send("Nao consegui conectar no canal de voz.")
+                    return
+            else:
+                await self.vc.move_to(self.music_queue[0][1])
+
+            #remove the first element as you are currently playing it
+            self.last_music = self.music_queue[0]
+            self.music_queue.pop(0)
+
+            self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
         else:
             self.is_playing = False
-            await self.vc.disconnect()
 
 
     @commands.command(name="play", help="Plays a selected song from youtube")
@@ -84,8 +108,9 @@ class music_cog(commands.Cog):
                 await self.vc.disconnect()
             
             self.music_queue.append([song, voice_channel])
-            await ctx.send(f"💬 **{song['title']}** adicionada a playlist.")
-            if not self.is_playing:
+            if self.is_playing:
+                await ctx.send(f"💬 **{song['title']}** adicionada a playlist.")
+            else:
                 await self.play_music(ctx)
 
 
@@ -107,13 +132,21 @@ class music_cog(commands.Cog):
             self.is_paused = False
             self.is_playing = True
             self.vc.resume()
+    
+    
+    @commands.command(name = "julio")
+    async def repeat(self, ctx) -> None:
+        if self.last_music != None:
+            self.music_queue.append(self.last_music)
+            if not self.is_playing:
+                await self.play_music(ctx)
 
 
     @commands.command(name="skip", help="Skips the current song being played")
     async def skip(self, ctx) -> None:
         if self.vc != None and self.vc:
             self.vc.stop()
-            self.play_next(ctx=ctx)
+            await self.play_music(ctx)
 
 
     @commands.command(name="list", help="Displays the current songs in queue")

@@ -23,6 +23,7 @@ Use `{bot.command_prefix}` antes de todas os comandos. Exemplo: `!stop`
 * **list** - Lista musicas na playlist
 * **clear** - Para a musica e limpa playlist
 * **quit** - Forca bot a sair do chat
+* **julio** - Repete ultima musica ou adiciona ela no final da playlist
 """
 
     
