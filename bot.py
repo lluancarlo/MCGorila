@@ -17,5 +17,5 @@ async def setup_hook() -> None:
         await bot.load_extension(f"cogs.{file}")
         print(file + " loaded!")
 
-# Run the bot with your token
+
 bot.run(os.environ.get("TOKEN"))
