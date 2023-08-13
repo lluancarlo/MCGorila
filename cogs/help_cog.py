@@ -49,5 +49,5 @@ Se não gostou faz o seguinte: ***ME PANHA*** !
 
     @commands.command(name="help", help="Displays all the available commands")
     async def help(self, ctx) -> None:
-        self.help_embed.set_thumbnail(url=self.thumbnail_list[random.randint(0, len(self.thumbnail_list))])
+        self.help_embed.set_thumbnail(url=self.thumbnail_list[random.randint(0, len(self.thumbnail_list)-1)])
         await ctx.send(embed=self.help_embed)
