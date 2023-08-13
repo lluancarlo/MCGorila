@@ -85,8 +85,7 @@ class music_cog(commands.Cog):
     async def play(self, ctx, *args) -> None:
         query = " ".join(args)
         
-        voice_channel = ctx.author.voice.channel
-        if voice_channel is None:
+        if ctx.author.voice is None:
             await ctx.send("💬 Conecte a um canal de voz primeiro!")
         
         elif self.is_paused:
@@ -94,6 +93,7 @@ class music_cog(commands.Cog):
 
         else:
             #try to connect to voice channel if you are not already connected
+            voice_channel = ctx.author.voice.channel
             if self.vc == None or not self.vc.is_connected():
                 self.vc = await voice_channel.connect()
                 #in case we fail to connect
@@ -139,7 +139,9 @@ class music_cog(commands.Cog):
     async def repeat(self, ctx) -> None:
         if self.last_music != None:
             self.music_queue.append(self.last_music)
-            if not self.is_playing:
+            if self.is_playing:
+                await ctx.send(f"💬 **{self.last_music[0]['title']}** adicionada a playlist.")
+            else:
                 await self.play_music(ctx)
 
 

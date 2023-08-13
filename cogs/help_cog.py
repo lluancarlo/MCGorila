@@ -11,20 +11,25 @@ class help_cog(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
         self.text_channel_list = []
-        self.help_message = f"""
-## Comandos:
-Use `{bot.command_prefix}` antes de todas os comandos. Exemplo: `!stop`
-* **help** - Mostra todos os comandos
-### Player de Musica
-* **play** - Procura video no Youtube e toca ou da play em musica em pausa
-* **stop** - Pausa ou continua musica atual
-* **resume** - Continua musica atual
-* **skip** - Pula musica atual
-* **list** - Lista musicas na playlist
-* **clear** - Para a musica e limpa playlist
-* **quit** - Forca bot a sair do chat
-* **julio** - Repete ultima musica ou adiciona ela no final da playlist
+        self.help_message = discord.Embed(
+            type="rich",
+            color=discord.Colour.green(),
+            title="Comandos",
+            description=f"""
+**help** - Mostra todos os comandos
+**play** - Procura video no Youtube e toca ou da play em musica em pausa
+**stop** - Pausa ou continua musica atual
+**resume** - Continua musica atual
+**skip** - Pula musica atual
+**list** - Lista musicas na playlist
+**clear** - Para a musica e limpa playlist
+**quit** - Forca bot a sair do chat
+**julio** - Repete ultima musica ou adiciona ela no final da playlist
+\n
+**Obs**: Use `{bot.command_prefix}` antes de todas os comandos. Exemplo: `!stop`
+Se não gostou faz o seguinte: ***ME PANHA*** !
 """
+        )
 
     
     #some debug info so that we know the bot has started    
@@ -37,4 +42,4 @@ Use `{bot.command_prefix}` antes de todas os comandos. Exemplo: `!stop`
 
     @commands.command(name="help", help="Displays all the available commands")
     async def help(self, ctx) -> None:
-        await ctx.send(self.help_message)
+        await ctx.send(embed=self.help_message)
