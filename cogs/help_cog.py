@@ -27,7 +27,7 @@ class help_cog(commands.Cog):
 **quit** - Forca bot a sair do chat
 **julio** - Repete ultima musica ou adiciona ela no final da playlist
 \n
-**Obs**: Use `{bot.command_prefix}` antes de todas os comandos. Exemplo: `!stop`
+**Obs**: Use `{bot.command_prefix}` antes de todas os comandos. Exemplo: `{bot.command_prefix}stop`
 Se não gostou faz o seguinte: ***ME PANHA*** !
 """
         )

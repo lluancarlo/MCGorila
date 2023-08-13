@@ -8,7 +8,7 @@ COGS_FILE = ("help_cog", "music_cog")
 INTENTS = discord.Intents.default()
 INTENTS.message_content = True
 
-bot = commands.Bot(command_prefix='!', case_insensitive=False, intents=INTENTS)
+bot = commands.Bot(command_prefix='.', case_insensitive=False, intents=INTENTS)
 bot.remove_command('help')
 
 @bot.event
