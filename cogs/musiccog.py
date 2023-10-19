@@ -2,11 +2,11 @@ import discord
 from discord.ext import commands
 from youtube_dl import YoutubeDL
     
-async def setup(bot) -> None:
-    await bot.add_cog(music_cog(bot))
+def setup(bot) -> None:
+    bot.add_cog(MusicCog(bot))
 
 
-class music_cog(commands.Cog):
+class MusicCog(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
         self.list_max = 5
@@ -81,9 +81,10 @@ class music_cog(commands.Cog):
             self.is_playing = False
 
 
-    @commands.command(name="play", help="Plays a selected song from youtube")
-    async def play(self, ctx, *args) -> None:
-        query = " ".join(args)
+    # @commands.command(name="play", help="Plays a selected song from youtube")
+    # TODO: Why I can't put description on command????
+    @discord.slash_command()
+    async def play(self, ctx: discord.commands.context.ApplicationContext, music: str) -> None:
         
         if ctx.author.voice is None:
             await ctx.send("💬 Conecte a um canal de voz primeiro!")
@@ -98,25 +99,26 @@ class music_cog(commands.Cog):
                 self.vc = await voice_channel.connect()
                 #in case we fail to connect
                 if self.vc == None:
-                    await ctx.send("🆘 Nao consegui conectar ao canal de voz.")
+                    await ctx.respond("🆘 Nao consegui conectar ao canal de voz.")
                     return
                 await self.vc.move_to(voice_channel)
             
             # Download song
-            song = self.search_yt(query)
+            song = self.search_yt(music)
             if type(song) == type(True):
-                await ctx.send("🆘 Erro ao baixar musica. Formato incorreto. Playlist e lives nao sao suportados.")
+                await ctx.respond("🆘 Erro ao baixar musica. Formato incorreto. Playlist e lives nao sao suportados.")
                 await self.vc.disconnect()
             
             self.music_queue.append([song, voice_channel])
             if self.is_playing:
-                await ctx.send(f"💬 **{song['title']}** adicionada a playlist.")
+                await ctx.respond(f"💬 **{song['title']}** adicionada a playlist.")
             else:
                 await self.play_music(ctx)
 
 
-    @commands.command(name="stop", help="Stops the current song being played")
-    async def stop(self, ctx, *args) -> None:
+    # @commands.command(name="stop", help="Stops the current song being played")
+    @discord.slash_command()
+    async def stop(self, ctx: discord.commands.context.ApplicationContext) -> None:
         if self.is_playing:
             self.is_playing = False
             self.is_paused = True
@@ -127,16 +129,18 @@ class music_cog(commands.Cog):
             self.vc.resume()
 
 
-    @commands.command(name = "resume", help="Resumes playing with the discord bot")
-    async def resume(self, ctx, *args) -> None:
+    # @commands.command(name = "resume", help="Resumes playing with the discord bot")
+    @discord.slash_command()
+    async def resume(self, ctx: discord.commands.context.ApplicationContext) -> None:
         if self.is_paused:
             self.is_paused = False
             self.is_playing = True
             self.vc.resume()
     
     
-    @commands.command(name = "julio")
-    async def repeat(self, ctx) -> None:
+    # @commands.command(name = "julio")
+    @discord.slash_command()
+    async def repeat(self, ctx: discord.commands.context.ApplicationContext) -> None:
         if self.last_music != None:
             self.music_queue.append(self.last_music)
             if self.is_playing:
@@ -145,15 +149,17 @@ class music_cog(commands.Cog):
                 await self.play_music(ctx)
 
 
-    @commands.command(name="skip", help="Skips the current song being played")
-    async def skip(self, ctx) -> None:
+    # @commands.command(name="skip", help="Skips the current song being played")
+    @discord.slash_command()
+    async def skip(self, ctx: discord.commands.context.ApplicationContext) -> None:
         if self.vc != None and self.vc:
             self.vc.stop()
             await self.play_music(ctx)
 
 
-    @commands.command(name="list", help="Displays the current songs in queue")
-    async def queue(self, ctx) -> None:
+    # @commands.command(name="list", help="Displays the current songs in queue")
+    @discord.slash_command()
+    async def queue(self, ctx: discord.commands.context.ApplicationContext) -> None:
         msg = ""
 
         if self.last_music != None:
@@ -174,16 +180,18 @@ class music_cog(commands.Cog):
             await ctx.send("💬 Nenhuma musica na playlist")
 
 
-    @commands.command(name="clear", help="Stops the music and clears the queue")
-    async def clear(self, ctx) -> None:
+    # @commands.command(name="clear", help="Stops the music and clears the queue")
+    @discord.slash_command()
+    async def clear(self, ctx: discord.commands.context.ApplicationContext) -> None:
         if self.vc != None and self.is_playing:
             self.vc.stop()
         self.music_queue = []
         await ctx.send("💬 Playlist deletada")
 
 
-    @commands.command(name="quit", help="Kick the bot from VC")
-    async def dc(self, ctx) -> None:
+    # @commands.command(name="quit", help="Kick the bot from VC")
+    @discord.slash_command()
+    async def dc(self, ctx: discord.commands.context.ApplicationContext) -> None:
         self.is_playing = False
         self.is_paused = False
         await self.vc.disconnect()
