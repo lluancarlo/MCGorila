@@ -1,12 +1,10 @@
-# GorilaBot
-Simple discord bot to play yt music
+# MC Gorila Bot
+Simple discord bot to play yt music.
+Using `Discord Js` and `Discord-Player Js`.
 
 # How to
-1. Install all packages
-`pip install -r requirements.txt`
+1. Install all packages with `npm install`
 
-2. Download [FFMPEG](https://ffmpeg.org/ "FFMPEG") and configure system environment variables to the *bin/ffmpeg*, *bin/ffplay* and *bin/ffprobe* files.
+2. Set your discord token in `.env` file
 
-3. Set your discord token in `.env` file
-
-4. Run `bot.py`
+3. Run `bot.js`

@@ -1,0 +1,88 @@
+{
+    "helpers": {
+        "logger": {
+            "command": "[{0}][COMMAND] Guild '{1}': User '{2}' called command '{3}'",
+            "info": "[{0}][INFO] Guild '{1}': {2}",
+            "error": "[{0}][ERROR] Guild '{1}': {2}",
+            "general": "[{0}]' {1}"
+        },
+        "player": {
+            "error": "❌ | Ops... algo deu errado, houve um erro relacionado à reprodução. Por favor, tente novamente",
+            "play-title": "▶️ | Começando a tocar",
+            "add-title": "⏱️ | Adicionado a playlist",
+            "msg-playlist": "Playlist **{0}** ([Link]({1})) com **{2}** musicas",
+            "msg-song": "Musica **{0}** ([Link]({1}))"
+        }
+    },
+    "commands": {
+        "control": {
+            "quit": {
+                "name": "quit",
+                "description": "Desconecta bot do canal de voz",
+                "error": "❌ | Ops... algo deu errado, ocorreu um erro ao desconectar. Por favor, tente novamente",
+                "embed-title": "🛑 | Desconectando",
+                "msg": "A música foi interrompida... saindo do canal"
+            }
+        },
+        "player": {
+            "list": {
+                "name": "list",
+                "description": "Lista musicas na playlist atual",
+                "empty-list": "❌ | Nenhuma música está sendo reproduzida no momento",
+                "embed-title": "🎵 | Lista atual",
+                "list-first": "**Agora: {0} ([Link]({1}))**\n",
+                "list-item": "{0} - {1} ([Link]({2}))\n"
+            },
+            "skip": {
+                "name": "skip",
+                "description": "Pula musica atual",
+                "error": "❌ | Ops... algo deu errado, ocorreu um erro ao pular a música. Por favor, tente novamente",
+                "embed-title": "⏭ | Pulando musica",
+                "msg": "**Tocando agora: ${0} ([Link](${1}))**\n Musica pulada: ${2} ([Link](${3}))"
+            },
+            "pause": {
+                "name": "pause",
+                "description": "Pausa ou continua musica atual",
+                "error": "❌ | Ops... algo deu errado, ocorreu um erro ao pausar/retomar a música. Por favor, tente novamente",
+                "embed-title-pause": "⏸️ | Musica pausada",
+                "embed-title-resume": "⏯️ | Musica retomada",
+                "msg": "${0} ([Link](${1}))"
+            },
+            "play": {
+                "name": "play",
+                "description": "Toca musica ou adiciona musica a playlist atual",
+                "param-name": "query",
+                "param-description": "Link ou nome da musica",
+                "not-in-channel": "Você não está em um canal de voz",
+                "not-same-channel": "Você não está no mesmo canal de voz que eu",
+                "not-found": "Nenhuma musica encontrada"
+            },
+            "clear": {
+                "name": "clear",
+                "description": "Deleta todas as musicas na playlist atual",
+                "error": "❌ | Ops... algo deu errado, ocorreu um erro ao limpar a playlist. Por favor, tente novamente",
+                "embed-title": "🧹 | Limpar playlist",
+                "msg": "A playlist atual foi deletada"
+            }
+        },
+        "utilities": {
+            "ping": {
+                "name": "ping",
+                "description": "Verifica latência com servidor",
+                "pong": "Pong!",
+                "reply": "To zuando, a latência com o servidor é **{0}ms.**"
+            }
+        }
+    },
+    "events": {
+        "client": {
+            "ready": {
+                "reply": "Ready! Logged in as {0}"
+            },
+            "interactioncreate": {
+                "command-notfound": "O comando {0} não existe",
+                "command-error": "Ocorreu um erro ao executar este comando"
+            }
+        }
+    }
+}
