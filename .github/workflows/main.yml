@@ -1,0 +1,20 @@
+name: 🚀 Deploy BisectHosting
+on: push
+jobs:
+  ftp-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+    - name: 📝 Create env file
+      run: echo "TOKEN=${{ secrets.env_token }}" >> env
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.ftp_host }}
+        port: ${{ secrets.ftp_port }}
+        username: ${{ secrets.ftp_username }}
+        password: ${{ secrets.ftp_password }}
+        protocol: "ftps"
+        server-dir: '/home/container/'
