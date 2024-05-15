@@ -10,11 +10,11 @@ jobs:
     - name: 📝 Create env file
       run: echo "TOKEN=${{ secrets.env_token }}" >> env
     - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
         server: ${{ secrets.ftp_host }}
         port: ${{ secrets.ftp_port }}
         username: ${{ secrets.ftp_username }}
         password: ${{ secrets.ftp_password }}
-        protocol: "ftps"
-        server-dir: '/home/container/'
+        sftp_only: true
+        remote_path: '/home/container/'
