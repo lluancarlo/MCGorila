@@ -1,17 +1,26 @@
 name: Deploy to BisectHosting
 on:
     push:
-        branches: [main]
+        branches: [master]
+    workflow_dispatch:
+        inputs:
+          sync:
+            description: "File synchronization"
+            required: true
+            default: "delta"
 jobs:
-    deploy_job:
+    deploy_master:
+      name: "master branch"
+      if: ${{ github.ref == 'refs/heads/master' }}
       runs-on: ubuntu-latest
-      name: deploy
       steps:
       - name: Checkout to branch
-        uses: actions/checkout@v2
-      - name: Set discord token
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: "Set discord token"
         run: echo "TOKEN=${{ secrets.env_token }}" >> env
-      - name: Deploying files
+      - name: "Deploying files"
         uses: milanmk/actions-file-deployer@master
         with:
             remote-protocol: "sftp"
