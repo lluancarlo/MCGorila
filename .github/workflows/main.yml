@@ -19,6 +19,6 @@ jobs:
             server: ${{ secrets.ftp_host }}
             port: ${{ secrets.ftp_port }}
             local_path: './*'
-            remote_path: '/'
+            remote_path: '/home/container/'
             sftp_only: true
             sftpArgs: '-o ConnectTimeout=5'
