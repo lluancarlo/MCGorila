@@ -12,13 +12,12 @@ jobs:
       - name: Set discord token
         run: echo "TOKEN=${{ secrets.env_token }}" >> env
       - name: Deploying files
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        uses: milanmk/actions-file-deployer@master
         with:
-            username: ${{ secrets.ftp_username }}
-            password: ${{ secrets.ftp_password }}
-            server: ${{ secrets.ftp_host }}
+            remote-protocol: "sftp"
+            remote-host: ${{ secrets.ftp_host }}
+            remote-user: ${{ secrets.ftp_username }}
+            remote-password: ${{ secrets.ftp_password }}
             port: ${{ secrets.ftp_port }}
             local_path: './*'
             remote_path: '/home/container/'
-            sftp_only: true
-            sftpArgs: '-o ConnectTimeout=5'
