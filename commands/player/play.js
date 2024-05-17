@@ -13,7 +13,7 @@ async function addTrack(interaction, search){
     }
     catch (err) {
         logger.error(interaction, err);
-        return interaction.followUp({ content: strings.helpers.player['error'], ephemeral: true })
+        return interaction.followUp({ content: strings.commands.player.play['error'], ephemeral: true })
     }
 }
 
@@ -25,8 +25,7 @@ async function play(interaction, search) {
     }
     catch (err) {
         queue.delete();
-        logger.error(interaction, err);
-        return interaction.followUp({ content: strings.helpers.player['error'], ephemeral: true })
+        return interaction.followUp({ content: strings.commands.player.play['error'], ephemeral: true })
     }
 
     const embed = new EmbedBuilder()
@@ -34,23 +33,22 @@ async function play(interaction, search) {
         .setTimestamp()
 
     if (queue.isPlaying()) {
-        embed.setTitle(strings.helpers.player['add-title']);
+        embed.setTitle(strings.commands.player.play['add-title']);
     } 
     else {
         try {
             await queue.node.play(queue.tracks[0]);
         }
         catch (err) {
-            logger.error(interaction, err);
-            return interaction.followUp({ content: strings.helpers.player['error'], ephemeral: true })
+            return interaction.followUp({ content: strings.commands.player.play['error'], ephemeral: true })
         }
-        embed.setTitle(strings.helpers.player['play-title']);
+        embed.setTitle(strings.commands.player.play['play-title']);
     }
 
     if (search.playlist)
         embed.setDescription(
             dataHelper.formatString(
-                strings.helpers.player['msg-playlist'],
+                strings.commands.player.play['msg-playlist'],
                 search.tracks[0].playlist.title,
                 search.tracks[0].playlist.url,
                 search.tracks.length
@@ -59,7 +57,7 @@ async function play(interaction, search) {
     else
         embed.setDescription(
             dataHelper.formatString(
-                strings.helpers.player['msg-song'],
+                strings.commands.player.play['msg-song'],
                 search.tracks[0].title,
                 search.tracks[0].url
             )
@@ -80,9 +78,9 @@ module.exports = {
                 .setAutocomplete(true)),
     async execute(interaction) {
         if (!interaction.member.voice.channel)
-            return await interaction.reply({ content: strings.commands.player.play['not-in-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-in-channel'], ephemeral: true });
         if (interaction.guild.members.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId)
-            return await interaction.reply({ content: strings.commands.player.play['not-same-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-same-channel'], ephemeral: true });
 
         const player = Player.singleton();
         await playerHelper.getQueue(interaction);

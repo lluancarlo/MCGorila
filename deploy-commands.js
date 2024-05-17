@@ -24,8 +24,9 @@ for (const folder of commandFolders) {
 	}
 }
 
-const clientId = "1139338072618700880";
-const guildId = "729445252527554651";
+const clientId = process.env.GORILAID;
+const guildId = process.env.ROMAID;
+console.log(clientId, guildId)
 
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(process.env.TOKEN);

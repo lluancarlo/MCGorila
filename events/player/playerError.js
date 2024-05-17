@@ -3,7 +3,7 @@ var logHelper = require("../../utils/logHelper");
 
 module.exports = {
 	isPlayer: true,
-	name: GuildQueueEvent.error,
+	name: GuildQueueEvent.playerError,
 	execute(queue, error) {
 		logHelper.error(error);
 	},

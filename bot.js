@@ -51,11 +51,11 @@ for (const folder of eventFolders) {
 		const filePath = path.join(eventsPath, file);
 		const event = require(filePath);
 		if (event.isPlayer) {
-			player.on(event.name, (interaction) => event.execute(interaction));
+			player.events.on(event.name, (...args) => event.execute(...args));
 		} else if (event.once) {
-			client.once(event.name, (interaction) => event.execute(interaction));
+			client.once(event.name, (...args) => event.execute(...args));
 		} else {
-			client.on(event.name, (interaction) => event.execute(interaction));
+			client.on(event.name, (...args) => event.execute(...args));
 		}
 	}
 }

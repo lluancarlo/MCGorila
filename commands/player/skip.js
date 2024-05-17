@@ -10,16 +10,16 @@ module.exports = {
 	    .setDescription(strings.commands.player.skip['description']),
     async execute(interaction) {
         if (!interaction.member.voice.channel)
-            return await interaction.reply({ content: strings.commands.player.play['not-in-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-in-channel'], ephemeral: true });
         if (interaction.guild.members.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId)
-            return await interaction.reply({ content: strings.commands.player.play['not-same-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-same-channel'], ephemeral: true });
 
         const queue = await playerHelper.getQueue(interaction);
-        if (!queue || !queue.isPlaying())
+        if (!queue || !queue.isPlaying() || queue.tracks.toArray().length == 0)
             return interaction.reply({ content: strings.commands.player.list['empty-list'], ephemeral: true });
 
         const nextTrack = queue.tracks.toArray()[0];
-        const skipEmbed = new EmbedBuilder()
+        const embed = new EmbedBuilder()
             .setThumbnail(nextTrack.thumbnail)
             .setTitle(strings.commands.player.skip['embed-title'])
             .setTitle(`⏭ | Song skipped`)
@@ -36,10 +36,10 @@ module.exports = {
             
         try {
             queue.node.skip();
-            interaction.reply({ embeds: [skipEmbed] });
+            interaction.reply({ embeds: [embed] });
         }
         catch (err) {
-            interaction.reply({ content: strings.commands.player.skip['error'], ephemeral: true });
+            interaction.reply({ content: strings.commands.player.skip['error'], ephemeral: true })
         }
     }
 };

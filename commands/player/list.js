@@ -6,14 +6,14 @@ const playerHelper = require('../../utils/playerHelper');
 module.exports = {
     isPlayer: true,
     data:  new SlashCommandBuilder()
-    .setName(strings.commands.player.list['name'])
-    .setDescription(strings.commands.player.list['description']),
+        .setName(strings.commands.player.list['name'])
+        .setDescription(strings.commands.player.list['description']),
     async execute(interaction) {
         const queue = await playerHelper.getQueue(interaction);
         if (!queue || !queue.isPlaying())
             return interaction.reply({ content: strings.commands.player.list['empty-list'], ephemeral: true });
 
-        const queueEmbed = new EmbedBuilder()
+        const embed = new EmbedBuilder()
             .setThumbnail(queue.currentTrack.thumbnail)
             .setTitle(strings.commands.player.list['embed-title'])
             .setTimestamp();
@@ -23,7 +23,8 @@ module.exports = {
         for (let i = 0; i < queuedTracks.length; i++) {
             description += dataHelper.formatString(strings.commands.player.list['list-item'], i + 1, queuedTracks[i].title, queuedTracks[i].url);
         }
-        queueEmbed.setDescription(description);
-        return await interaction.reply({ embeds: [queueEmbed] });
+        embed.setDescription(description);
+
+        return await interaction.reply({ embeds: [embed] });
     }
 };

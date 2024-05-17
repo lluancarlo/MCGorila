@@ -1,8 +1,8 @@
 const { REST, Routes } = require('discord.js');
 require('dotenv').config();
 
-const clientId = "1139338072618700880";
-const guildId = "729445252527554651";
+const clientId = process.env.TESTID;
+const guildId = process.env.ROMAID;
 
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(process.env.TOKEN);
