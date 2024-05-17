@@ -24,7 +24,7 @@ for (const folder of commandFolders) {
 	}
 }
 
-const clientId = process.env.GORILAID;
+const clientId = process.env.TESTID;
 const guildId = process.env.ROMAID;
 console.log(clientId, guildId)
 

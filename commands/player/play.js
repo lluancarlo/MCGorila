@@ -8,7 +8,12 @@ const logger = require("../../utils/logHelper");
 async function addTrack(interaction, search){
     try {
         let queue = await playerHelper.getQueue(interaction);
-        queue.addTrack(search.tracks[0]);
+        if (search.playlist)
+            search.tracks.forEach(track => {
+                queue.addTrack(track);
+            });
+        else
+            queue.addTrack(search.tracks[0]);
         await play(interaction, search);
     }
     catch (err) {

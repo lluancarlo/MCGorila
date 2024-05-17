@@ -41,7 +41,7 @@
                 "name": "list",
                 "description": "Lista musicas na playlist atual",
                 "empty-list": "❌ | A playlist esta vazia",
-                "embed-title": "🎵 | Lista atual",
+                "embed-title": "🎵 | Lista atual (**{0}** musicas)",
                 "list-first": "**Agora: {0} ([Link]({1}))**\n",
                 "list-item": "**{0}** - {1} ([Link]({2}))\n"
             },
@@ -50,7 +50,7 @@
                 "description": "Pula musica atual",
                 "error": "❌ | Ops... algo deu errado, ocorreu um erro ao pular a música. Por favor, tente novamente",
                 "embed-title": "⏭ | Pulando musica",
-                "msg": "**Tocando agora: ${0} ([Link](${1}))**\n Musica pulada: ${2} ([Link](${3}))"
+                "msg": "**Tocando agora: {0} ([Link]({1}))**\n Musica pulada: {2} ([Link]({3}))"
             },
             "pause": {
                 "name": "pause",
@@ -58,7 +58,7 @@
                 "error": "❌ | Ops... algo deu errado, ocorreu um erro ao pausar/retomar a música. Por favor, tente novamente",
                 "embed-title-pause": "⏸️ | Musica pausada",
                 "embed-title-resume": "⏯️ | Musica retomada",
-                "msg": "${0} ([Link](${1}))"
+                "msg": "{0} ([Link]({1}))"
             },
             "play": {
                 "name": "play",

@@ -15,13 +15,14 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setThumbnail(queue.currentTrack.thumbnail)
-            .setTitle(strings.commands.player.list['embed-title'])
+            .setTitle(dataHelper.formatString(strings.commands.player.list['embed-title'], queue.tracks))
             .setTimestamp();
         
         const queuedTracks = queue.tracks.toArray();
         let description = dataHelper.formatString(strings.commands.player.list['list-first'], queue.currentTrack.title, queue.currentTrack.url);
         for (let i = 0; i < queuedTracks.length; i++) {
             description += dataHelper.formatString(strings.commands.player.list['list-item'], i + 1, queuedTracks[i].title, queuedTracks[i].url);
+            if (i == 9) break; // List max 10 tracks
         }
         embed.setDescription(description);
 
