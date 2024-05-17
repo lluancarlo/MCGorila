@@ -18,7 +18,7 @@ async function addTrack(interaction, search){
     }
     catch (err) {
         logger.error(interaction, err);
-        return interaction.followUp({ content: strings.commands.player.play['error'], ephemeral: true })
+        return interaction.editReply({ content: strings.commands.player.play['error'], ephemeral: true })
     }
 }
 
@@ -30,7 +30,7 @@ async function play(interaction, search) {
     }
     catch (err) {
         queue.delete();
-        return interaction.followUp({ content: strings.commands.player.play['error'], ephemeral: true })
+        return interaction.editReply({ content: strings.commands.player.play['error'], ephemeral: true })
     }
 
     const embed = new EmbedBuilder()
@@ -45,7 +45,7 @@ async function play(interaction, search) {
             await queue.node.play(queue.tracks[0]);
         }
         catch (err) {
-            return interaction.followUp({ content: strings.commands.player.play['error'], ephemeral: true })
+            return interaction.editReply({ content: strings.commands.player.play['error'], ephemeral: true })
         }
         embed.setTitle(strings.commands.player.play['play-title']);
     }
@@ -68,7 +68,7 @@ async function play(interaction, search) {
             )
         );
 
-    interaction.followUp({ embeds: [embed] });
+    interaction.editReply({ embeds: [embed] });
 }
 
 module.exports = {
