@@ -30,6 +30,7 @@ async function play(interaction, search) {
     }
     catch (err) {
         queue.delete();
+        logger.error(interaction, err);
         return interaction.editReply({ content: strings.commands.player.play['error'], ephemeral: true })
     }
 
@@ -45,6 +46,7 @@ async function play(interaction, search) {
             await queue.node.play(queue.tracks[0]);
         }
         catch (err) {
+            logger.error(interaction, err);
             return interaction.editReply({ content: strings.commands.player.play['error'], ephemeral: true })
         }
         embed.setTitle(strings.commands.player.play['play-title']);
