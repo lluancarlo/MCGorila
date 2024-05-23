@@ -15,7 +15,7 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setThumbnail(queue.currentTrack.thumbnail)
-            .setTitle(dataHelper.formatString(strings.commands.player.list['embed-title'], queue.tracks))
+            .setTitle(dataHelper.formatString(strings.commands.player.list['embed-title'], queue.tracks.length))
             .setTimestamp();
         
         const queuedTracks = queue.tracks.toArray();
