@@ -3,7 +3,7 @@ const path = require('node:path');
 const logger = require('./utils/logHelper')
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { Player } = require("discord-player");
-const { YoutubeExtractor, SpotifyExtractor } = require('@discord-player/extractor');
+const { YoutubeiExtractor } = require("discord-player-youtubei")
 require('dotenv').config();
 
 // Create a new client instance
@@ -13,8 +13,7 @@ const client = new Client({
 client.commands = new Collection();
 
 const player = new Player(client);
-player.extractors.register(YoutubeExtractor, {});
-player.extractors.register(SpotifyExtractor, {});
+player.extractors.register(YoutubeiExtractor, {});
 
 // Add all commands dinamically
 let count = 0;
