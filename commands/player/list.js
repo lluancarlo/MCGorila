@@ -13,12 +13,13 @@ module.exports = {
         if (!queue || !queue.isPlaying())
             return interaction.reply({ content: strings.commands.player.list['empty-list'], ephemeral: true });
 
+        const queuedTracks = queue.tracks.toArray();
+
         const embed = new EmbedBuilder()
             .setThumbnail(queue.currentTrack.thumbnail)
-            .setTitle(dataHelper.formatString(strings.commands.player.list['embed-title'], queue.tracks.length))
+            .setTitle(dataHelper.formatString(strings.commands.player.list['embed-title'], queuedTracks.length))
             .setTimestamp();
         
-        const queuedTracks = queue.tracks.toArray();
         let description = dataHelper.formatString(strings.commands.player.list['list-first'], queue.currentTrack.title, queue.currentTrack.url);
         for (let i = 0; i < queuedTracks.length; i++) {
             description += dataHelper.formatString(strings.commands.player.list['list-item'], i + 1, queuedTracks[i].title, queuedTracks[i].url);
