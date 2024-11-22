@@ -8,5 +8,8 @@ WORKDIR /usr/src/bot
 COPY package.json /usr/src/bot
 RUN npm install
 
-COPY . .
-CMD [ "node", "bot.js" ]
+# Our precious bot
+COPY . /usr/src/bot
+
+# Start me!
+CMD ["node", "bot.js"]
