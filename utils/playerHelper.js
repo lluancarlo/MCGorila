@@ -2,7 +2,7 @@ const { Player } = require('discord-player');
 
 module.exports = {
     async getQueue(interaction){
-        const player = Player.singleton();
+        const player = interaction.client.player;
         var checkqueue = player.nodes.get(interaction.guild.id);
 
         if (!checkqueue) {

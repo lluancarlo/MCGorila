@@ -13,6 +13,7 @@ const client = new Client({
 client.commands = new Collection();
 
 const player = new Player(client);
+client.player = player;
 player.extractors.register(YoutubeiExtractor, {});
 
 // Add all commands dinamically

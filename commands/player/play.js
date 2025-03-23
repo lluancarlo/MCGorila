@@ -88,8 +88,8 @@ module.exports = {
             return await interaction.reply({ content: strings.commands.general['not-in-channel'], ephemeral: true });
         if (interaction.guild.members.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId)
             return await interaction.reply({ content: strings.commands.general['not-same-channel'], ephemeral: true });
-
-        const player = Player.singleton();
+        
+        const player = interaction.client.player;
         await playerHelper.getQueue(interaction);
 
         const query = interaction.options.get(strings.commands.player.play['param-name']).value;
