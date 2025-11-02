@@ -20,12 +20,12 @@ module.exports = {
 				if (interaction.replied || interaction.deferred) {
 					await interaction.followUp({ 
 						content: events.client.interactioncreate["command-error"], 
-						ephemeral: true
+						flags: 64
 					});
 				} else {
 					await interaction.reply({ 
 						content: events.client.interactioncreate["command-error"], 
-						ephemeral: true 
+						flags: 64 
 					});
 				}
 			}

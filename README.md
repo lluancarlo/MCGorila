@@ -7,4 +7,4 @@ Using `Discord Js` and `Discord-Player Js`.
 
 2. Set your discord token in `.env` file
 
-3. Run `bot.js`
+3. run with `node bot.js`

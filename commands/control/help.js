@@ -25,10 +25,10 @@ module.exports = {
         embed.setDescription(description);
             
         try {
-            interaction.reply({ embeds: [embed], ephemeral: true })
+            interaction.reply({ embeds: [embed], flags: 64 })
         }
         catch (err) {
-            interaction.reply({ content: strings.commands.control.help['error'], ephemeral: true });
+            interaction.reply({ content: strings.commands.control.help['error'], flags: 64 });
         }
     }
 };

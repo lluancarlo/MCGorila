@@ -11,7 +11,7 @@ module.exports = {
     async execute(interaction) {
         const queue = await playerHelper.getQueue(interaction);
         if (!queue || !queue.isPlaying())
-            return interaction.reply({ content: strings.commands.player.list['empty-list'], ephemeral: true });
+            return interaction.reply({ content: strings.commands.player.list['empty-list'], flags: 64 });
 
         const queuedTracks = queue.tracks.toArray();
 

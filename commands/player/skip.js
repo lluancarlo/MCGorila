@@ -10,13 +10,13 @@ module.exports = {
 	    .setDescription(strings.commands.player.skip['description']),
     async execute(interaction) {
         if (!interaction.member.voice.channel)
-            return await interaction.reply({ content: strings.commands.general['not-in-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-in-channel'], flags: 64 });
         if (interaction.guild.members.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId)
-            return await interaction.reply({ content: strings.commands.general['not-same-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-same-channel'], flags: 64 });
 
         const queue = await playerHelper.getQueue(interaction);
         if (!queue || !queue.isPlaying() || queue.tracks.toArray().length == 0)
-            return interaction.reply({ content: strings.commands.player.list['empty-list'], ephemeral: true });
+            return interaction.reply({ content: strings.commands.player.list['empty-list'], flags: 64 });
 
         const nextTrack = queue.tracks.toArray()[0];
         const embed = new EmbedBuilder()
@@ -39,7 +39,7 @@ module.exports = {
             interaction.reply({ embeds: [embed] });
         }
         catch (err) {
-            interaction.reply({ content: strings.commands.player.skip['error'], ephemeral: true })
+            interaction.reply({ content: strings.commands.player.skip['error'], flags: 64 })
         }
     }
 };

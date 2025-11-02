@@ -10,13 +10,13 @@ module.exports = {
 	    .setDescription(strings.commands.player.pause['description']),
     async execute(interaction) {
         if (!interaction.member.voice.channel)
-            return await interaction.reply({ content: strings.commands.general['not-in-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-in-channel'], flags: 64 });
         if (interaction.guild.members.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId)
-            return await interaction.reply({ content: strings.commands.general['not-same-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-same-channel'], flags: 64 });
 
         const queue = await playerHelper.getQueue(interaction);
         if (!queue || !queue.isPlaying())
-            return interaction.reply({ content: strings.commands.player.list['empty-list'], ephemeral: true });
+            return interaction.reply({ content: strings.commands.player.list['empty-list'], flags: 64 });
 
         var checkPause = queue.node.isPaused();
         const embed = new EmbedBuilder()
@@ -30,7 +30,7 @@ module.exports = {
             interaction.reply({ embeds: [embed] })
         }
         catch (err) {
-            interaction.reply({ content: strings.commands.player.pause['error'], ephemeral: true });
+            interaction.reply({ content: strings.commands.player.pause['error'], flags: 64 });
         }
     }
 };

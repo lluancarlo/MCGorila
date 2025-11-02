@@ -12,14 +12,14 @@ module.exports = {
         async execute(interaction) {
             const queue = await playerHelper.getQueue(interaction);
             if (!queue || !queue.isPlaying())
-                return interaction.reply({ content: strings.commands.player.list['empty-list'], ephemeral: true });
+                return interaction.reply({ content: strings.commands.player.list['empty-list'], flags: 64 });
 
             try {
                 queue.tracks.shuffle();
             }
             catch (err) {
                 logger.error(interaction, err);
-                return interaction.editReply({ content: strings.commands.player.shuffle['error'], ephemeral: true })
+                return interaction.editReply({ content: strings.commands.player.shuffle['error'], flags: 64 })
             }
 
             const embed = new EmbedBuilder()

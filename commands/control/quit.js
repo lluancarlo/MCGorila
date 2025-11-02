@@ -8,13 +8,13 @@ module.exports = {
 	    .setDescription(strings.commands.control.quit['description']),
     async execute(interaction) {
         if (!interaction.member.voice.channel)
-            return await interaction.reply({ content: strings.commands.general['not-in-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-in-channel'], flags: 64 });
         if (interaction.guild.members.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId)
-            return await interaction.reply({ content: strings.commands.general['not-same-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-same-channel'], flags: 64 });
 
         const queue = await playerHelper.getQueue(interaction);
         if (!queue.connection)
-            return interaction.reply({ content: strings.commands.control.quit['not-connected'], ephemeral: true });
+            return interaction.reply({ content: strings.commands.control.quit['not-connected'], flags: 64 });
 
         const embed = new EmbedBuilder()
             .setTitle(strings.commands.control.quit['embed-title'])
@@ -26,7 +26,7 @@ module.exports = {
             interaction.reply({ embeds: [embed] })
         }
         catch (err) {
-            interaction.reply({ content: strings.commands.control.quit['error'], ephemeral: true });
+            interaction.reply({ content: strings.commands.control.quit['error'], flags: 64 });
         }
     }
 };

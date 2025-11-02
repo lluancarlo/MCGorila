@@ -18,7 +18,7 @@ async function addTrack(interaction, search){
     }
     catch (err) {
         logger.error(interaction, err);
-        return interaction.editReply({ content: strings.commands.player.play['error'], ephemeral: true })
+        return interaction.editReply({ content: strings.commands.player.play['error'], flags: 64 })
     }
 }
 
@@ -26,12 +26,15 @@ async function play(interaction, search) {
     var queue = await playerHelper.getQueue(interaction);
 
     try {
-        if (!queue.connection) await queue.connect(interaction.member.voice.channel);
+        if (!queue.connection) {
+            await queue.connect(interaction.member.voice.channel);
+            logger.info('Connected to voice channel:', interaction.member.voice.channel.name);
+        }
     }
     catch (err) {
         queue.delete();
         logger.error(interaction, err);
-        return interaction.editReply({ content: strings.commands.player.play['error'], ephemeral: true })
+        return interaction.editReply({ content: strings.commands.player.play['error'], flags: 64 })
     }
 
     const embed = new EmbedBuilder()
@@ -44,10 +47,11 @@ async function play(interaction, search) {
     else {
         try {
             await queue.node.play(queue.tracks[0]);
+            logger.info('Started playback for track:', queue.tracks[0].title);
         }
         catch (err) {
             logger.error(interaction, err);
-            return interaction.editReply({ content: strings.commands.player.play['error'], ephemeral: true })
+            return interaction.editReply({ content: strings.commands.player.play['error'], flags: 64 })
         }
         embed.setTitle(strings.commands.player.play['play-title']);
     }
@@ -85,9 +89,9 @@ module.exports = {
                 .setAutocomplete(true)),
     async execute(interaction) {
         if (!interaction.member.voice.channel)
-            return await interaction.reply({ content: strings.commands.general['not-in-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-in-channel'], flags: 64 });
         if (interaction.guild.members.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId)
-            return await interaction.reply({ content: strings.commands.general['not-same-channel'], ephemeral: true });
+            return await interaction.reply({ content: strings.commands.general['not-same-channel'], flags: 64 });
         
         const player = interaction.client.player;
         await playerHelper.getQueue(interaction);
@@ -100,7 +104,7 @@ module.exports = {
             .catch(() => {});
 
         if (!searchResult || !searchResult.tracks.length)
-            return await interaction.reply({ content: strings.commands.player.play['not-found'], ephemeral: true  });
+            return await interaction.reply({ content: strings.commands.player.play['not-found'], flags: 64  });
         
         await interaction.deferReply();
         return await addTrack(interaction, searchResult);

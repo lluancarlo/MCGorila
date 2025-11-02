@@ -14,7 +14,9 @@ client.commands = new Collection();
 
 const player = new Player(client);
 client.player = player;
-player.extractors.register(YoutubeiExtractor, {});
+player.extractors.register(YoutubeiExtractor, {
+	cookie: process.env.YT_COOKIE
+});
 
 // Add all commands dinamically
 let count = 0;
