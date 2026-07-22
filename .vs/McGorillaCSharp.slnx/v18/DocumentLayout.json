@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Code\\MCGorila\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5D298BF4-3696-D105-61C1-AF04268D6ABA}|McGorillaCSharp\\McGorillaCSharp.csproj|d:\\code\\mcgorila\\mcgorillacsharp\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{5D298BF4-3696-D105-61C1-AF04268D6ABA}|McGorillaCSharp\\McGorillaCSharp.csproj|solutionrelative:mcgorillacsharp\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0174dea2-fdbe-4ef1-8f99-c0beae78880f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "README.md",
+              "DocumentMoniker": "D:\\Code\\MCGorila\\McGorillaCSharp\\README.md",
+              "RelativeDocumentMoniker": "McGorillaCSharp\\README.md",
+              "ToolTip": "D:\\Code\\MCGorila\\McGorillaCSharp\\README.md",
+              "RelativeToolTip": "McGorillaCSharp\\README.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-07-22T18:35:59.611Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

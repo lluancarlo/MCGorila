@@ -1,6 +1,6 @@
 # McGorillaCSharp
 
-A Discord music bot written in C# (.NET 10). C# port of [MCGorila](../MCGorila) (the Node.js version).
+A Discord music bot written in C# .NET 10
 
 It plays audio from YouTube links in a voice channel: the link is downloaded with **yt-dlp**, decoded to PCM with **ffmpeg** and streamed into Discord with end-to-end encrypted voice (DAVE protocol).
 
@@ -11,8 +11,6 @@ It plays audio from YouTube links in a voice channel: the link is downloaded wit
 | `/play <link>` | Play a YouTube link. If something is already playing, the track is added to the queue. |
 | `/pause` | Pause the current track; run it again to resume. |
 | `/stop` | Stop playback, clear the queue and leave the voice channel. |
-| `/list` | Show the current track and the queue. |
-| `/clear` | Clear the queue but keep the current track playing. |
 
 Rules: you must be in a voice channel to use a command, and in the *same* channel as the bot when it is already playing somewhere.
 
@@ -68,8 +66,6 @@ McGorillaCSharp/
     PlayCommand.cs
     PauseCommand.cs
     StopCommand.cs
-    ListCommand.cs
-    ClearCommand.cs
   Services/                Business logic
     MusicService.cs        Facade: play / pause / stop / queue, voice-channel rules
     GuildPlayer.cs         Per-guild queue + playback loop (internal)

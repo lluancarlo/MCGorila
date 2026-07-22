@@ -1,0 +1,63 @@
+# Bundled tools and downloaded audio (fetched by the build, never committed)
+tools/
+cache/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+viewstate/
+*.dll
+*.exe
+
+# Visual Studio cache/options
+.vs/
+.vscode/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# SQL Server Files
+*.mdf
+*.ldf
+*.ndf
+
+# User-specific configs
+appsettings.Development.json
+
+# Backup files
+*.bak
+*.old
+*.tmp
+
+# Operating System Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.Spotlight-V100
+.Trashes
