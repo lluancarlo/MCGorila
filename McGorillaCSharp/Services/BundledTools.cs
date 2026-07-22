@@ -24,11 +24,12 @@ public static class BundledTools
     {
         foreach (var tool in new[] { Ffmpeg, YtDlp })
         {
-            if (!File.Exists(tool))
+            if (!Exists(tool))
             {
                 throw new FileNotFoundException(
-                    $"Bundled tool '{Path.GetFileName(tool)}' was not found at '{tool}'. " +
-                    "Run 'dotnet build' once with an internet connection to download it.", tool);
+                    $"Tool '{Path.GetFileName(tool)}' was not found at '{tool}' or on PATH. " +
+                    "On Windows, run 'dotnet build' once with an internet connection to download it; " +
+                    "on Linux, install it system-wide.", tool);
             }
         }
 
@@ -38,6 +39,26 @@ public static class BundledTools
     private static string Resolve(string name)
     {
         var fileName = OperatingSystem.IsWindows() ? name + ".exe" : name;
-        return Path.Combine(ToolsDirectory, fileName);
+        var bundled = Path.Combine(ToolsDirectory, fileName);
+        if (File.Exists(bundled))
+        {
+            return bundled;
+        }
+
+        // No bundled copy. On Linux (e.g. the Docker image) the tools are installed
+        // system-wide, so fall back to the bare name and let Process.Start resolve it via PATH.
+        return OperatingSystem.IsWindows() ? bundled : name;
+    }
+
+    private static bool Exists(string tool)
+    {
+        if (Path.IsPathRooted(tool))
+        {
+            return File.Exists(tool);
+        }
+
+        var path = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+        return path.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries)
+            .Any(dir => File.Exists(Path.Combine(dir, tool)));
     }
 }

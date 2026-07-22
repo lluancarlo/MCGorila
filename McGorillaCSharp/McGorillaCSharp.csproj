@@ -20,18 +20,24 @@
 
   <!--
     Discord.Net loads libdave by plain name, so the native library has to sit next to the
-    executable; the package itself only lays it out under runtimes/<rid>/native.
+    executable; the package itself only lays it out under shared/<rid>/native.
+    When no RuntimeIdentifier is set (plain `dotnet build` on a dev machine) win-x64 is assumed.
   -->
+  <PropertyGroup>
+    <LibDaveRid Condition="'$(RuntimeIdentifier)' != ''">$(RuntimeIdentifier)</LibDaveRid>
+    <LibDaveRid Condition="'$(LibDaveRid)' == ''">win-x64</LibDaveRid>
+  </PropertyGroup>
+
   <Target Name="CopyLibDave" AfterTargets="Build">
     <ItemGroup>
-      <_LibDaveNative Include="$(LibDaveDirectory)\shared\win-x64\native\libdave.dll" />
+      <_LibDaveNative Include="$(LibDaveDirectory)\shared\$(LibDaveRid)\native\*" />
     </ItemGroup>
     <Copy SourceFiles="@(_LibDaveNative)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
   </Target>
 
   <Target Name="PublishLibDave" AfterTargets="Publish">
     <ItemGroup>
-      <_LibDaveNative Include="$(LibDaveDirectory)\shared\win-x64\native\libdave.dll" />
+      <_LibDaveNative Include="$(LibDaveDirectory)\shared\$(LibDaveRid)\native\*" />
     </ItemGroup>
     <Copy SourceFiles="@(_LibDaveNative)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
   </Target>
@@ -47,6 +53,9 @@
     ffmpeg (audio decoding) and yt-dlp (YouTube download) are fetched into the project's
     tools/ folder on first build and copied next to the app, so nothing has to be installed
     globally on the machine. Both downloads are cached: later builds are a no-op.
+
+    This only happens on Windows: on Linux (e.g. the Docker image) the tools are expected
+    to be installed system-wide and BundledTools falls back to resolving them from PATH.
   -->
   <PropertyGroup>
     <BundledToolsDir>$(MSBuildProjectDirectory)\tools</BundledToolsDir>
@@ -57,7 +66,7 @@
   </PropertyGroup>
 
   <Target Name="DownloadBundledTools" BeforeTargets="BeforeBuild"
-          Condition="!Exists('$(FfmpegExe)') Or !Exists('$(YtDlpExe)')">
+          Condition="'$(OS)' == 'Windows_NT' And (!Exists('$(FfmpegExe)') Or !Exists('$(YtDlpExe)'))">
     <MakeDir Directories="$(BundledToolsDir)" />
 
     <!-- The zip is kept until ffmpeg.exe has been extracted, so an interrupted build does not download it twice. -->
@@ -92,7 +101,8 @@
                   Retries="2" />
   </Target>
 
-  <Target Name="CopyBundledTools" AfterTargets="DownloadBundledTools" BeforeTargets="BeforeBuild">
+  <Target Name="CopyBundledTools" AfterTargets="DownloadBundledTools" BeforeTargets="BeforeBuild"
+          Condition="'$(OS)' == 'Windows_NT'">
     <ItemGroup>
       <BundledTool Include="$(FfmpegExe);$(YtDlpExe)" />
     </ItemGroup>
@@ -101,7 +111,8 @@
           SkipUnchangedFiles="true" />
   </Target>
 
-  <Target Name="PublishBundledTools" AfterTargets="Publish">
+  <Target Name="PublishBundledTools" AfterTargets="Publish"
+          Condition="'$(OS)' == 'Windows_NT'">
     <ItemGroup>
       <BundledTool Include="$(FfmpegExe);$(YtDlpExe)" />
     </ItemGroup>

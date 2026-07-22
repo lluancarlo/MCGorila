@@ -42,6 +42,21 @@ You must be in a voice channel to use a command — the same one as the bot if i
 
 3. Invite the bot to your server with the `applications.commands` and `bot` scopes (with *Connect* and *Speak* permissions), join a voice channel and run `/play`.
 
+## Running in Docker
+
+The image works on `linux/amd64` and `linux/arm64` — including a Raspberry Pi 3/4/5, as long as it runs a **64-bit OS** (the native voice libraries have no 32-bit ARM build). Inside the container, ffmpeg and yt-dlp are installed as Linux system tools; the `.exe` bundling only happens on Windows.
+
+```
+docker build -t mcgorila .
+docker run -d --name mcgorila -e DISCORD_TOKEN=your_bot_token --restart unless-stopped mcgorila
+```
+
+Or with compose (reads `DISCORD_TOKEN` from the host environment or an `.env` file):
+
+```
+docker compose up -d --build
+```
+
 ## Troubleshooting
 
 - **`Bundled tool 'ffmpeg.exe' was not found`** — run `dotnet build` once with an internet connection.

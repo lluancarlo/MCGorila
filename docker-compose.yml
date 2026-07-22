@@ -1,0 +1,8 @@
+services:
+  mcgorila:
+    build: .
+    container_name: mcgorila
+    environment:
+      # Read from the host environment or an .env file next to this compose file.
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+    restart: unless-stopped
