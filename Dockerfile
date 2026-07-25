@@ -1,7 +1,9 @@
 # Multi-arch image: linux/amd64 and linux/arm64 (e.g. Raspberry Pi 3/4/5 with a 64-bit OS).
 # 32-bit ARM is not supported: the native voice libraries (opus/libsodium/libdave) ship no armv7 build.
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+# Build on the host's native platform and cross-compile via -a $TARGETARCH,
+# so arm64 images don't run the compiler under QEMU emulation.
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG TARGETARCH
 WORKDIR /src
 
