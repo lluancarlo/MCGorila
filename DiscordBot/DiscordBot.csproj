@@ -1,0 +1,124 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>DiscordBot</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Discord.Net" Version="3.19.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.10" />
+    <!-- Native libraries Discord.Net P/Invokes for voice (opus.dll / libsodium.dll / libdave.dll). -->
+    <PackageReference Include="DSharpPlus.Natives.Opus" Version="1.6.1.31" />
+    <PackageReference Include="libsodium" Version="1.0.22" />
+    <!-- Discord closes the voice socket with 4017 "E2EE/DAVE protocol required" without this. -->
+    <PackageReference Include="libdave" Version="1.1.1.7" />
+  </ItemGroup>
+
+  <!--
+    Discord.Net loads libdave by plain name, so the native library has to sit next to the
+    executable; the package itself only lays it out under shared/<rid>/native.
+    When no RuntimeIdentifier is set (plain `dotnet build` on a dev machine) win-x64 is assumed.
+  -->
+  <PropertyGroup>
+    <LibDaveRid Condition="'$(RuntimeIdentifier)' != ''">$(RuntimeIdentifier)</LibDaveRid>
+    <LibDaveRid Condition="'$(LibDaveRid)' == ''">win-x64</LibDaveRid>
+  </PropertyGroup>
+
+  <Target Name="CopyLibDave" AfterTargets="Build">
+    <ItemGroup>
+      <_LibDaveNative Include="$(LibDaveDirectory)\shared\$(LibDaveRid)\native\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_LibDaveNative)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="PublishLibDave" AfterTargets="Publish">
+    <ItemGroup>
+      <_LibDaveNative Include="$(LibDaveDirectory)\shared\$(LibDaveRid)\native\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_LibDaveNative)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <ItemGroup>
+    <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="appsettings.Development.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!--
+    Bundled command line tools.
+
+    ffmpeg (audio decoding) and yt-dlp (YouTube download) are fetched into the project's
+    tools/ folder on first build and copied next to the app, so nothing has to be installed
+    globally on the machine. Both downloads are cached: later builds are a no-op.
+
+    This only happens on Windows: on Linux (e.g. the Docker image) the tools are expected
+    to be installed system-wide and BundledTools falls back to resolving them from PATH.
+  -->
+  <PropertyGroup>
+    <BundledToolsDir>$(MSBuildProjectDirectory)\tools</BundledToolsDir>
+    <FfmpegExe>$(BundledToolsDir)\ffmpeg.exe</FfmpegExe>
+    <YtDlpExe>$(BundledToolsDir)\yt-dlp.exe</YtDlpExe>
+    <FfmpegZipUrl>https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-lgpl.zip</FfmpegZipUrl>
+    <YtDlpUrl>https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe</YtDlpUrl>
+  </PropertyGroup>
+
+  <Target Name="DownloadBundledTools" BeforeTargets="BeforeBuild"
+          Condition="'$(OS)' == 'Windows_NT' And (!Exists('$(FfmpegExe)') Or !Exists('$(YtDlpExe)'))">
+    <MakeDir Directories="$(BundledToolsDir)" />
+
+    <!-- The zip is kept until ffmpeg.exe has been extracted, so an interrupted build does not download it twice. -->
+    <PropertyGroup>
+      <_FfmpegZip>$(BundledToolsDir)\ffmpeg.zip</_FfmpegZip>
+      <_NeedFfmpegDownload Condition="!Exists('$(FfmpegExe)') And !Exists('$(_FfmpegZip)')">true</_NeedFfmpegDownload>
+    </PropertyGroup>
+
+    <Message Condition="'$(_NeedFfmpegDownload)' == 'true'" Importance="high" Text="Downloading ffmpeg (one time, ~140 MB)..." />
+    <DownloadFile Condition="'$(_NeedFfmpegDownload)' == 'true'"
+                  SourceUrl="$(FfmpegZipUrl)"
+                  DestinationFolder="$(BundledToolsDir)"
+                  DestinationFileName="ffmpeg.zip"
+                  Retries="2" />
+
+    <Unzip Condition="!Exists('$(FfmpegExe)')"
+           SourceFiles="$(_FfmpegZip)"
+           DestinationFolder="$(BundledToolsDir)\ffmpeg-extract"
+           Include="**\ffmpeg.exe" />
+    <ItemGroup Condition="!Exists('$(FfmpegExe)')">
+      <_ExtractedFfmpeg Include="$(BundledToolsDir)\ffmpeg-extract\**\ffmpeg.exe" />
+    </ItemGroup>
+    <Copy Condition="!Exists('$(FfmpegExe)')" SourceFiles="@(_ExtractedFfmpeg)" DestinationFiles="$(FfmpegExe)" />
+    <RemoveDir Directories="$(BundledToolsDir)\ffmpeg-extract" />
+    <Delete Condition="Exists('$(FfmpegExe)')" Files="$(_FfmpegZip)" />
+
+    <Message Condition="!Exists('$(YtDlpExe)')" Importance="high" Text="Downloading yt-dlp (one time, ~18 MB)..." />
+    <DownloadFile Condition="!Exists('$(YtDlpExe)')"
+                  SourceUrl="$(YtDlpUrl)"
+                  DestinationFolder="$(BundledToolsDir)"
+                  DestinationFileName="yt-dlp.exe"
+                  Retries="2" />
+  </Target>
+
+  <Target Name="CopyBundledTools" AfterTargets="DownloadBundledTools" BeforeTargets="BeforeBuild"
+          Condition="'$(OS)' == 'Windows_NT'">
+    <ItemGroup>
+      <BundledTool Include="$(FfmpegExe);$(YtDlpExe)" />
+    </ItemGroup>
+    <Copy SourceFiles="@(BundledTool)"
+          DestinationFolder="$(OutDir)tools"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="PublishBundledTools" AfterTargets="Publish"
+          Condition="'$(OS)' == 'Windows_NT'">
+    <ItemGroup>
+      <BundledTool Include="$(FfmpegExe);$(YtDlpExe)" />
+    </ItemGroup>
+    <Copy SourceFiles="@(BundledTool)"
+          DestinationFolder="$(PublishDir)tools"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

@@ -8,13 +8,13 @@ ARG TARGETARCH
 WORKDIR /src
 
 # Restore first so the NuGet layer is cached between builds.
-COPY McGorillaCSharp/McGorillaCSharp.csproj McGorillaCSharp/
+COPY DiscordBot/DiscordBot.csproj DiscordBot/
 RUN arch=${TARGETARCH:-$(dpkg --print-architecture)} \
- && dotnet restore McGorillaCSharp -a "$arch"
+ && dotnet restore DiscordBot -a "$arch"
 
-COPY McGorillaCSharp/ McGorillaCSharp/
+COPY DiscordBot/ DiscordBot/
 RUN arch=${TARGETARCH:-$(dpkg --print-architecture)} \
- && dotnet publish McGorillaCSharp -a "$arch" -c Release --no-restore -o /app
+ && dotnet publish DiscordBot -a "$arch" -c Release --no-restore -o /app
 
 FROM mcr.microsoft.com/dotnet/runtime:10.0
 ARG TARGETARCH
@@ -39,4 +39,4 @@ WORKDIR /app
 COPY --from=build /app .
 
 # Pass the bot token at run time: docker run -e DISCORD_TOKEN=...
-ENTRYPOINT ["dotnet", "McGorillaCSharp.dll"]
+ENTRYPOINT ["dotnet", "DiscordBot.dll"]

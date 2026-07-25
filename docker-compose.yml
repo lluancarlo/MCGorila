@@ -1,7 +1,7 @@
 services:
-  mcgorila:
+  discordbot:
     build: .
-    container_name: mcgorila
+    container_name: discordbot
     environment:
       # Read from the host environment or an .env file next to this compose file.
       - DISCORD_TOKEN=${DISCORD_TOKEN}

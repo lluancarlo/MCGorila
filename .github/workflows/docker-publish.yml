@@ -36,7 +36,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/lluancarlo/mcgorila:latest
-            ghcr.io/lluancarlo/mcgorila:${{ github.sha }}
+            ghcr.io/lluancarlo/discordbot:latest
+            ghcr.io/lluancarlo/discordbot:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

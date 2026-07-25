@@ -1,4 +1,4 @@
-# McGorillaCSharp
+# DiscordBot
 
 A Discord music bot written in C# (.NET 10). It plays audio from YouTube links in a voice channel using bundled **yt-dlp** and **ffmpeg** — nothing needs to be installed globally.
 
@@ -23,7 +23,7 @@ You must be in a voice channel to use a command — the same one as the bot if i
 
 ## Getting started
 
-1. Set your token in `McGorillaCSharp/appsettings.json` (or via the `DISCORD_TOKEN` environment variable):
+1. Set your token in `DiscordBot/appsettings.json` (or via the `DISCORD_TOKEN` environment variable):
 
    ```json
    {
@@ -37,7 +37,7 @@ You must be in a voice channel to use a command — the same one as the bot if i
 2. Build and run:
 
    ```
-   dotnet run --project McGorillaCSharp
+   dotnet run --project DiscordBot
    ```
 
 3. Invite the bot to your server with the `applications.commands` and `bot` scopes (with *Connect* and *Speak* permissions), join a voice channel and run `/play`.
@@ -47,8 +47,8 @@ You must be in a voice channel to use a command — the same one as the bot if i
 The image works on `linux/amd64` and `linux/arm64` — including a Raspberry Pi 3/4/5, as long as it runs a **64-bit OS** (the native voice libraries have no 32-bit ARM build). Inside the container, ffmpeg and yt-dlp are installed as Linux system tools; the `.exe` bundling only happens on Windows.
 
 ```
-docker build -t mcgorila .
-docker run -d --name mcgorila -e DISCORD_TOKEN=your_bot_token --restart unless-stopped mcgorila
+docker build -t discordbot .
+docker run -d --name discordbot -e DISCORD_TOKEN=your_bot_token --restart unless-stopped discordbot
 ```
 
 Or with compose (reads `DISCORD_TOKEN` from the host environment or an `.env` file):
